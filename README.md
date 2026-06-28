@@ -1,35 +1,25 @@
-# cleanface
+# Cleanface
 
-A Pebble watchapp/watchface written in C using the Pebble SDK.
+A clean and minimal watchface for Pebble.
 
-## Building & running
+## Preview
+
+![Cleanface preview](preview.png)
+
+## Features
+
+- **Time** — 24-hour format (`HH:MM`), centered, Noto Sans Bold 49px
+- **Date** — Full day name + day and month, anchored to the bottom, Noto Sans Regular 21px
+- **Battery** — 10px horizontal bar across the top, width proportional to charge level
+
+White background, black text. No clutter.
+
+## Build & Install
 
 ```sh
-pebble build                          # build for all targetPlatforms
-pebble install --emulator emery       # install on the emery emulator
-pebble install --phone <ip>           # install to a paired phone
+pebble build
+pebble install --phone <IP>
 ```
-
-## Target platforms
-
-`targetPlatforms` in `package.json` controls which watches you build for. The
-modern Pebble hardware is **emery** (Pebble Time 2), **gabbro** (Pebble Round
-2), and **flint** (Pebble 2 Duo); the original Pebble platforms (aplite,
-basalt, chalk, diorite) are included by default for backwards compatibility.
-
-## Project layout
-
-```
-src/c/           C source for the watchapp
-src/pkjs/        PebbleKit JS (phone-side) source, if any
-worker_src/c/    Background worker source, if any
-resources/       Images, fonts, and other bundled resources
-package.json     Project metadata (UUID, platforms, resources, message keys)
-wscript          Build rules — usually no need to edit
-```
-
-By default this project is configured as a watchapp. To make it a watchface,
-set `pebble.watchapp.watchface` to `true` in `package.json`.
 
 ## Documentation
 
