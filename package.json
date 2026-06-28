@@ -29,15 +29,15 @@
       "media": [
         {
           "type": "font",
-          "name": "FONT_SPACEMONO_BOLD_42",
-          "file": "fonts/SpaceMono-Bold.ttf",
+          "name": "FONT_NOTOSANS_BOLD_42",
+          "file": "fonts/NotoSans-Bold.ttf",
           "characterRegex": "[0-9:]",
           "compatibility": "2.7"
         },
         {
           "type": "font",
-          "name": "FONT_SPACEMONO_REGULAR_21",
-          "file": "fonts/SpaceMono-Regular.ttf",
+          "name": "FONT_NOTOSANS_REGULAR_21",
+          "file": "fonts/NotoSans-Regular.ttf",
           "compatibility": "2.7"
         }
       ]
