@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include <locale.h>
 
 static Window *s_window;
 static TextLayer *s_time_layer;
@@ -87,6 +88,7 @@ static void prv_window_unload(Window *window) {
 }
 
 static void prv_init(void) {
+  setlocale(LC_ALL, "");
   s_window = window_create();
   window_set_window_handlers(s_window, (WindowHandlers) {
     .load = prv_window_load,
