@@ -12,7 +12,8 @@ static char s_time_buf[6];
 static char s_date_buf[32];
 static int s_battery_percent;
 
-static void prv_update_time(void) {
+static void prv_update_time(void)
+{
   time_t now = time(NULL);
   struct tm *t = localtime(&now);
   strftime(s_time_buf, sizeof(s_time_buf), "%H:%M", t);
@@ -25,23 +26,27 @@ static void prv_update_time(void) {
   text_layer_set_text(s_date_layer, s_date_buf);
 }
 
-static void prv_tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+static void prv_tick_handler(struct tm *tick_time, TimeUnits units_changed)
+{
   prv_update_time();
 }
 
-static void prv_battery_update_proc(Layer *layer, GContext *ctx) {
+static void prv_battery_update_proc(Layer *layer, GContext *ctx)
+{
   GRect bounds = layer_get_bounds(layer);
   int bar_width = (s_battery_percent * (bounds.size.w - 2)) / 100;
   graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, GRect(1, 1, bar_width, bounds.size.h - 2), 0, GCornerNone);
 }
 
-static void prv_battery_handler(BatteryChargeState charge) {
+static void prv_battery_handler(BatteryChargeState charge)
+{
   s_battery_percent = charge.charge_percent;
   layer_mark_dirty(s_battery_layer);
 }
 
-static void prv_window_load(Window *window) {
+static void prv_window_load(Window *window)
+{
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
@@ -79,7 +84,8 @@ static void prv_window_load(Window *window) {
   prv_battery_handler(battery_state_service_peek());
 }
 
-static void prv_window_unload(Window *window) {
+static void prv_window_unload(Window *window)
+{
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_date_layer);
   layer_destroy(s_battery_layer);
@@ -87,26 +93,29 @@ static void prv_window_unload(Window *window) {
   fonts_unload_custom_font(s_font_notosans_regular_21);
 }
 
-static void prv_init(void) {
+static void prv_init(void)
+{
   setlocale(LC_ALL, "");
   s_window = window_create();
-  window_set_window_handlers(s_window, (WindowHandlers) {
-    .load = prv_window_load,
-    .unload = prv_window_unload,
-  });
+  window_set_window_handlers(s_window, (WindowHandlers){
+                                           .load = prv_window_load,
+                                           .unload = prv_window_unload,
+                                       });
   window_stack_push(s_window, true);
 
   tick_timer_service_subscribe(MINUTE_UNIT, prv_tick_handler);
   battery_state_service_subscribe(prv_battery_handler);
 }
 
-static void prv_deinit(void) {
+static void prv_deinit(void)
+{
   tick_timer_service_unsubscribe();
   battery_state_service_unsubscribe();
   window_destroy(s_window);
 }
 
-int main(void) {
+int main(void)
+{
   prv_init();
   app_event_loop();
   prv_deinit();
