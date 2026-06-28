@@ -3,14 +3,13 @@
 static Window *s_window;
 static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
-static TextLayer *s_battery_layer;
+static Layer *s_battery_layer;
 static GFont s_font_spacemono_bold_42;
 static GFont s_font_spacemono_regular_21;
-static GFont s_font_spacemono_regular_14;
 
 static char s_time_buf[6];
 static char s_date_buf[20];
-static char s_battery_buf[8];
+static int s_battery_percent;
 
 static void prv_update_time(void) {
   time_t now = time(NULL);
@@ -25,9 +24,16 @@ static void prv_tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   prv_update_time();
 }
 
+static void prv_battery_update_proc(Layer *layer, GContext *ctx) {
+  GRect bounds = layer_get_bounds(layer);
+  int bar_width = (s_battery_percent * (bounds.size.w - 2)) / 100;
+  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_fill_rect(ctx, GRect(1, 1, bar_width, bounds.size.h - 2), 0, GCornerNone);
+}
+
 static void prv_battery_handler(BatteryChargeState charge) {
-  snprintf(s_battery_buf, sizeof(s_battery_buf), "%d%%", charge.charge_percent);
-  text_layer_set_text(s_battery_layer, s_battery_buf);
+  s_battery_percent = charge.charge_percent;
+  layer_mark_dirty(s_battery_layer);
 }
 
 static void prv_window_load(Window *window) {
@@ -39,7 +45,6 @@ static void prv_window_load(Window *window) {
   // Load custom fonts
   s_font_spacemono_bold_42 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SPACEMONO_BOLD_42));
   s_font_spacemono_regular_21 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SPACEMONO_REGULAR_21));
-  s_font_spacemono_regular_14 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SPACEMONO_REGULAR_14));
 
   // Time layer — large, centered
   int time_h = 50;
@@ -60,13 +65,10 @@ static void prv_window_load(Window *window) {
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
-  // Battery layer — top right
-  s_battery_layer = text_layer_create(GRect(bounds.size.w - 50, 2, 48, 20));
-  text_layer_set_background_color(s_battery_layer, GColorClear);
-  text_layer_set_text_color(s_battery_layer, GColorBlack);
-  text_layer_set_font(s_battery_layer, s_font_spacemono_regular_14);
-  text_layer_set_text_alignment(s_battery_layer, GTextAlignmentRight);
-  layer_add_child(window_layer, text_layer_get_layer(s_battery_layer));
+  // Battery layer — bar across top
+  s_battery_layer = layer_create(GRect(0, 0, bounds.size.w, 10));
+  layer_set_update_proc(s_battery_layer, prv_battery_update_proc);
+  layer_add_child(window_layer, s_battery_layer);
 
   // Show initial values
   prv_update_time();
@@ -76,10 +78,9 @@ static void prv_window_load(Window *window) {
 static void prv_window_unload(Window *window) {
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_date_layer);
-  text_layer_destroy(s_battery_layer);
+  layer_destroy(s_battery_layer);
   fonts_unload_custom_font(s_font_spacemono_bold_42);
   fonts_unload_custom_font(s_font_spacemono_regular_21);
-  fonts_unload_custom_font(s_font_spacemono_regular_14);
 }
 
 static void prv_init(void) {

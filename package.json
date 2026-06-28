@@ -39,12 +39,6 @@
           "name": "FONT_SPACEMONO_REGULAR_21",
           "file": "fonts/SpaceMono-Regular.ttf",
           "compatibility": "2.7"
-        },
-        {
-          "type": "font",
-          "name": "FONT_SPACEMONO_REGULAR_14",
-          "file": "fonts/SpaceMono-Regular.ttf",
-          "compatibility": "2.7"
         }
       ]
     }
