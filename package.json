@@ -1,0 +1,52 @@
+{
+  "name": "cleanface",
+  "author": "MakeAwesomeHappen",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "cleanface",
+    "uuid": "d6345cef-87db-4a26-8a10-cb59008fdc43",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "emery",
+      "flint",
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "font",
+          "name": "FONT_SPACEMONO_BOLD_42",
+          "file": "fonts/SpaceMono-Bold.ttf",
+          "characterRegex": "[0-9:]",
+          "compatibility": "2.7"
+        },
+        {
+          "type": "font",
+          "name": "FONT_SPACEMONO_REGULAR_21",
+          "file": "fonts/SpaceMono-Regular.ttf",
+          "compatibility": "2.7"
+        },
+        {
+          "type": "font",
+          "name": "FONT_SPACEMONO_REGULAR_14",
+          "file": "fonts/SpaceMono-Regular.ttf",
+          "compatibility": "2.7"
+        }
+      ]
+    }
+  }
+}
