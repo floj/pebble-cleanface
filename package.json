@@ -29,7 +29,7 @@
       "media": [
         {
           "type": "font",
-          "name": "FONT_NOTOSANS_BOLD_42",
+          "name": "FONT_NOTOSANS_BOLD_49",
           "file": "fonts/NotoSans-Bold.ttf",
           "characterRegex": "[0-9:]",
           "compatibility": "2.7"
